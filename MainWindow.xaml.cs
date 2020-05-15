@@ -37,7 +37,7 @@ namespace display_time_remaining
 				var diff = destTime - DateTime.Now.TimeOfDay;
 				if (last_minutes != diff.TotalMinutes) {
 					last_minutes = diff.Minutes;
-					firstOffset.Offset = 1 - diff.TotalMinutes / length_minutes;
+					//firstOffset.Offset = 1 - diff.TotalMinutes / length_minutes;
 				}
 				textBlock.Text = diff.ToString(displayFmt);
 			};
