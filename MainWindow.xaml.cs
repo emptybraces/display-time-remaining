@@ -7,51 +7,90 @@ namespace display_time_remaining
 {
 	public partial class MainWindow : Window
 	{
-		DispatcherTimer timer;
-		int intervalMS = 40;
-		string displayFmt = @"hh\:mm\:ss\:ff";
-		TimeSpan destTime;
+		DispatcherTimer _timer;
+		int _intervalMS = 40;
+		string _displayFmt = @"hh\:mm\:ss\:ff";
+		TimeSpan _destTime;
+		TimeSpan _startTime;
+		bool IsSetting => xNameGridSettings.Visibility == Visibility.Visible;
 
 		public MainWindow()
 		{
 			InitializeComponent();
-			SetTrans(true);
 			this.PreviewKeyDown += new KeyEventHandler((sender, e) => {
 				if (e.Key == Key.Escape)
 					Close();
 			});
+			this.Loaded += Init;
+			this.MouseEnter += OnEnter;
+			this.MouseLeave += OnLeave;
+			this.MouseLeftButtonDown += (sender, e) => this.DragMove();
+		}
+
+		private void Button_Click(object sender, RoutedEventArgs e)
+		{
+			xNameGridSettings.Visibility = Visibility.Hidden;
+			xNameStackPanelMain.Visibility = Visibility.Visible;
+			_destTime = xNameTimePickerTargetTime.Value.Value.TimeOfDay;
+			_displayFmt = xNameTextBoxDisplayformat.Text;
+			_intervalMS = xNameIntegerUpDownInterval.Value.Value;
+			_timer = CreateTimer();
+			_timer.Start();
+			ResizeMode = ResizeMode.CanResizeWithGrip;
 		}
 
 		DispatcherTimer CreateTimer()
 		{
 			var t = new DispatcherTimer(DispatcherPriority.SystemIdle);
-			t.Interval = TimeSpan.FromMilliseconds(intervalMS);
+			t.Interval = TimeSpan.FromMilliseconds(_intervalMS);
 			TimeSpan now = DateTime.Now.TimeOfDay;
-			if (destTime < now) {
-				destTime = destTime.Add(TimeSpan.FromDays(1));
+			_startTime = DateTime.Now.TimeOfDay;
+			if (_destTime < now) {
+				_destTime = _destTime.Add(TimeSpan.FromDays(1));
 			}
 			var time_of_day = DateTime.Now.TimeOfDay;
-			var length_minutes = (float)destTime.TotalMinutes - time_of_day.TotalMinutes;
-			var last_minutes = 0;
 			t.Tick += (sender, e) => {
-				var diff = destTime - DateTime.Now.TimeOfDay;
-				if (last_minutes != diff.TotalMinutes) {
-					last_minutes = diff.Minutes;
-					//firstOffset.Offset = 1 - diff.TotalMinutes / length_minutes;
-				}
-				textBlock.Text = diff.ToString(displayFmt);
+				var diff = _destTime - DateTime.Now.TimeOfDay;
+				xNameTextBlockTimerMain.Text = diff.ToString(_displayFmt);
 			};
 			return t;
 		}
 
-		private void Window_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
+		void Init(object sender, RoutedEventArgs e)
 		{
 			SetTrans(false);
+			xNameGridInfo.Visibility = Visibility.Hidden;
+			xNameTextBlockHelp.Text = @"Esc: Close window
+S: Show settings
+P: Pause
+			";
 		}
 
-		private void Window_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e)
+		void OnEnter(object sender, RoutedEventArgs e)
 		{
+			if (IsSetting)
+				return;
+			SetTrans(false);
+			xNameGridInfo.Visibility = Visibility.Visible;
+			xNameStackPanelMain.Visibility = Visibility.Hidden;
+			_timer.Tick += OnTickInfo;
+		}
+
+		void OnLeave(object sender, RoutedEventArgs e)
+		{
+			if (IsSetting)
+				return;
 			SetTrans(true);
+			xNameGridInfo.Visibility = Visibility.Hidden;
+			xNameStackPanelMain.Visibility = Visibility.Visible;
+			_timer.Tick -= OnTickInfo;
+		}
+
+		void OnTickInfo(object sender, EventArgs e)
+		{
+			var diff = _startTime - DateTime.Now.TimeOfDay;
+			xNameTextBlockElpasedTime.Text = diff.ToString(_displayFmt);
+			xNameTextBlockRemainingTime.Text = xNameTextBlockTimerMain.Text;
 		}
 
 		void SetTrans(bool transparency)
@@ -64,21 +103,5 @@ namespace display_time_remaining
 			}
 		}
 
-		private void Window_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
-		{
-			this.DragMove();
-		}
-
-		private void Button_Click(object sender, RoutedEventArgs e)
-		{
-			xNameGridSettings.Visibility = Visibility.Hidden;
-			xNameStackPanelMain.Visibility = Visibility.Visible;
-			destTime = xNameTimePickerTargetTime.Value.Value.TimeOfDay;
-			displayFmt = xNameTextBoxDisplayformat.Text;
-			intervalMS = xNameIntegerUpDownInterval.Value.Value;
-			timer = CreateTimer();
-			timer.Start();
-			ResizeMode = ResizeMode.CanResizeWithGrip;
-		}
 	}
 }
