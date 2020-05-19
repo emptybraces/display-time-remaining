@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit" x:Class="display_time_remaining.MainWindow"
         mc:Ignorable="d"
-        Title="remaining time apps" Height="170" Width="400" ResizeMode="NoResize" Topmost="True" WindowStyle="None" AllowsTransparency="True">
+        Title="remaining time apps" Height="170" Width="400" ResizeMode="NoResize" Topmost="True" WindowStyle="None" AllowsTransparency="True" Icon="icon.png">
     <Window.Resources>
         <xctk:ColorToSolidColorBrushConverter x:Key="ColorToSolidColorBrushConverter"/>
     </Window.Resources>
@@ -24,7 +24,7 @@
                 <TextBlock x:Name="xNameTextBlockTimerMain" Text="00:00:00" TextAlignment="Center" Foreground="{Binding SelectedColor, Converter={StaticResource ColorToSolidColorBrushConverter}, ElementName=xNameColorPickerNumber}"/>
             </Viewbox>
         </StackPanel>
-        <Grid x:Name="xNameGridSettings" Grid.Row="2" Grid.Column="1">
+        <Grid x:Name="xNameGridSettings" Grid.Row="2" Grid.Column="1" Background="#02FFFFFF">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="220*"/>
                 <ColumnDefinition Width="20*"/>
@@ -55,7 +55,7 @@
             <xctk:ColorPicker x:Name="xNameColorPickerBackground" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Column="2" Grid.Row="5" Width="100" ColorMode="ColorCanvas" SelectedColor="#FFFBFBFB" Background="White" ShowTabHeaders="False"/>
             <Button Content="Start" Click="Button_Click" Grid.Row="6" HorizontalAlignment="Center" Width="100" VerticalAlignment="Center" Grid.ColumnSpan="3" Grid.RowSpan="3"/>
         </Grid>
-        <Grid x:Name="xNameGridInfo" Background="#FF787878">
+        <Grid x:Name="xNameGridInfo" Background="#FF787878" d:IsHidden="True">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="220*"/>
                 <ColumnDefinition Width="20*"/>

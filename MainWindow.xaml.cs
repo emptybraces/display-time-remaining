@@ -51,6 +51,12 @@ namespace display_time_remaining
 			var time_of_day = DateTime.Now.TimeOfDay;
 			t.Tick += (sender, e) => {
 				var diff = _destTime - DateTime.Now.TimeOfDay;
+				if (diff < TimeSpan.Zero) {
+					diff = TimeSpan.Zero;
+					_timer.Stop();
+					xNameTextBlockTimerMain.Text = "FINISH";
+					return;
+				}
 				xNameTextBlockTimerMain.Text = diff.ToString(_displayFmt);
 			};
 			return t;
