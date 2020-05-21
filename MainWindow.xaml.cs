@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows;
 using System.Windows.Input;
+using System.Windows.Media;
 using System.Windows.Threading;
 
 namespace display_time_remaining
@@ -8,8 +9,7 @@ namespace display_time_remaining
 	public partial class MainWindow : Window
 	{
 		DispatcherTimer _timer;
-		int _intervalMS = 40;
-		string _displayFmt = @"hh\:mm\:ss\:ff";
+		int _intervalMS;
 		TimeSpan _destTime;
 		TimeSpan _startTime;
 		bool IsSetting => xNameGridSettings.Visibility == Visibility.Visible;
@@ -27,15 +27,45 @@ namespace display_time_remaining
 			this.MouseLeftButtonDown += (sender, e) => this.DragMove();
 		}
 
+		private void Window_Loaded(object sender, RoutedEventArgs e)
+		{
+			xNameTextBoxDisplayformat.Text = Properties.Settings.Default.FormatTime;
+			xNameTimePickerTargetTime.Value = new DateTime() + Properties.Settings.Default.DestTime;
+			xNameIntegerUpDownInterval.Value = Properties.Settings.Default.Interval;
+			var c = Properties.Settings.Default.ColorBackground;
+			((SolidColorBrush)Background).Color = Color.FromArgb(c.A, c.R, c.G, c.B);
+			c = Properties.Settings.Default.ColorText;
+			((SolidColorBrush)xNameTextBlockTimerMain.Foreground).Color = Color.FromArgb(c.A, c.R, c.G, c.B);
+
+
+		}
+
+		private void Window_Closed(object sender, EventArgs e)
+		{
+			Properties.Settings.Default.FormatTime = xNameTextBoxDisplayformat.Text;
+			Properties.Settings.Default.DestTime = xNameTimePickerTargetTime.Value.Value.TimeOfDay;
+			Properties.Settings.Default.Interval = xNameIntegerUpDownInterval.Value.Value;
+			var c = ((SolidColorBrush)Background).Color;
+			Properties.Settings.Default.ColorBackground = System.Drawing.Color.FromArgb(c.A, c.R, c.G, c.B);
+			c = ((SolidColorBrush)xNameTextBlockTimerMain.Foreground).Color;
+			Properties.Settings.Default.ColorText = System.Drawing.Color.FromArgb(c.A, c.R, c.G, c.B);
+			Properties.Settings.Default.Save();
+		}
+
 		private void Button_Click(object sender, RoutedEventArgs e)
 		{
 			xNameGridSettings.Visibility = Visibility.Hidden;
 			xNameStackPanelMain.Visibility = Visibility.Visible;
 			_destTime = xNameTimePickerTargetTime.Value.Value.TimeOfDay;
-			_displayFmt = xNameTextBoxDisplayformat.Text;
 			_intervalMS = xNameIntegerUpDownInterval.Value.Value;
 			_timer = CreateTimer();
 			_timer.Start();
+			if (Background is SolidColorBrush sb) {
+				var c = sb.Color;
+				c.A = Math.Max(c.A, (byte)2);
+				sb.Color = c;
+			}
+
 			ResizeMode = ResizeMode.CanResizeWithGrip;
 		}
 
@@ -57,7 +87,7 @@ namespace display_time_remaining
 					xNameTextBlockTimerMain.Text = "FINISH";
 					return;
 				}
-				xNameTextBlockTimerMain.Text = diff.ToString(_displayFmt);
+				xNameTextBlockTimerMain.Text = diff.ToString(xNameTextBoxDisplayformat.Text);
 			};
 			return t;
 		}
@@ -95,7 +125,7 @@ P: Pause
 		void OnTickInfo(object sender, EventArgs e)
 		{
 			var diff = _startTime - DateTime.Now.TimeOfDay;
-			xNameTextBlockElpasedTime.Text = diff.ToString(_displayFmt);
+			xNameTextBlockElpasedTime.Text = diff.ToString(xNameTextBoxDisplayformat.Text);
 			xNameTextBlockRemainingTime.Text = xNameTextBlockTimerMain.Text;
 		}
 
@@ -108,6 +138,5 @@ P: Pause
 				this.Opacity = 1;
 			}
 		}
-
 	}
 }

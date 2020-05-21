@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit" x:Class="display_time_remaining.MainWindow"
         mc:Ignorable="d"
-        Title="remaining time apps" Height="170" Width="400" ResizeMode="NoResize" Topmost="True" WindowStyle="None" AllowsTransparency="True" Icon="icon.png">
+        Title="remaining time apps" Height="170" Width="400" ResizeMode="NoResize" Topmost="True" WindowStyle="None" AllowsTransparency="True" Icon="icon.png" ShowInTaskbar="False" Loaded="Window_Loaded" Closed="Window_Closed">
     <Window.Resources>
         <xctk:ColorToSolidColorBrushConverter x:Key="ColorToSolidColorBrushConverter"/>
     </Window.Resources>
@@ -46,7 +46,7 @@
             <TextBlock Text="Target Time:" Grid.Row="1" TextAlignment="Right" VerticalAlignment="Center"/>
             <TextBlock Text="Display Format:" VerticalAlignment="Center" Grid.Row="2" HorizontalAlignment="Right" />
             <TextBlock Text="Refresh Interval(ms):" VerticalAlignment="Center" Grid.Row="3" HorizontalAlignment="Right" />
-            <TextBlock Text="Number Color:" VerticalAlignment="Center" Grid.Row="4" HorizontalAlignment="Right" />
+            <TextBlock Text="Timer Color:" VerticalAlignment="Center" Grid.Row="4" HorizontalAlignment="Right" />
             <TextBlock Text="Background Color:" Grid.Row="5" HorizontalAlignment="Right" VerticalAlignment="Center" />
             <xctk:TimePicker x:Name="xNameTimePickerTargetTime" DefaultValue="00:00" CurrentDateTimePart="Hour24" MinWidth="100" DisplayDefaultValueOnEmptyText="True" Grid.Row="1" Grid.Column="2" HorizontalAlignment="Left"/>
             <TextBox x:Name="xNameTextBoxDisplayformat" Width="100" Text="hh\:mm\:ss\:ff" HorizontalAlignment="Left" Grid.Row="2" Grid.Column="2" TextAlignment="Right" VerticalAlignment="Center"/>
