@@ -13,7 +13,10 @@
         <Binding Converter="{StaticResource ColorToSolidColorBrushConverter}" ElementName="xNameColorPickerBackground" Path="SelectedColor"/>
     </Window.Background>
     <Grid >
-        <StackPanel x:Name="xNameStackPanelMain">
+        <Viewbox x:Name="xNameViewboxPause" HorizontalAlignment="Left" StretchDirection="DownOnly" Margin="134,0,26,0" Grid.ColumnSpan="2">
+            <Image Source="pause.png" />
+        </Viewbox>
+        <StackPanel x:Name="xNameStackPanelMain" d:IsHidden="True">
             <!--<StackPanel.Background>
                 <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
                     <GradientStop x:Name="firstOffset" Color="Black" Offset="0"/>
@@ -24,7 +27,20 @@
                 <TextBlock x:Name="xNameTextBlockTimerMain" Text="00:00:00" TextAlignment="Center" Foreground="{Binding SelectedColor, Converter={StaticResource ColorToSolidColorBrushConverter}, ElementName=xNameColorPickerNumber}"/>
             </Viewbox>
         </StackPanel>
-        <Grid x:Name="xNameGridSettings" Grid.Row="2" Grid.Column="1" Background="#02FFFFFF">
+
+        <Grid x:Name="xNameGridPause" d:IsHidden="True">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="18*"/>
+                <ColumnDefinition Width="7*"/>
+            </Grid.ColumnDefinitions>
+
+            <Viewbox HorizontalAlignment="Center" Grid.ColumnSpan="2" Width="400">
+                <TextBlock x:Name="xNameTextBlockTimerPause" Text="00:00:00" TextAlignment="Center" Foreground="Cyan"/>
+            </Viewbox>
+            <TextBlock x:Name="xNameTextBlockRemainingTime2" Text="00:00:00" TextAlignment="Center" Foreground="{Binding SelectedColor, Converter={StaticResource ColorToSolidColorBrushConverter}, ElementName=xNameColorPickerNumber}" Grid.Column="1" VerticalAlignment="Bottom" FontSize="30"/>
+        </Grid>
+
+        <Grid x:Name="xNameGridSettings" Grid.Row="2" Grid.Column="1" Background="#02FFFFFF" d:IsHidden="True">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="220*"/>
                 <ColumnDefinition Width="20*"/>
@@ -55,7 +71,7 @@
             <xctk:ColorPicker x:Name="xNameColorPickerBackground" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Column="2" Grid.Row="5" Width="100" ColorMode="ColorCanvas" SelectedColor="#FFFBFBFB" Background="White" ShowTabHeaders="False"/>
             <Button Content="Start" Click="Button_Click" Grid.Row="6" HorizontalAlignment="Center" Width="100" VerticalAlignment="Center" Grid.ColumnSpan="3" Grid.RowSpan="3"/>
         </Grid>
-        <Grid x:Name="xNameGridInfo" Background="#FF787878" d:IsHidden="True">
+        <Grid x:Name="xNameGridInfo" Background="#FF787878">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="220*"/>
                 <ColumnDefinition Width="20*"/>
@@ -66,13 +82,24 @@
                 <RowDefinition Height="131*"/>
             </Grid.RowDefinitions>
             <TextBlock Text="Remaining" FontSize="15"/>
-            <TextBlock Text="Elapsed" FontSize="15" Grid.Column="2"/>
             <Viewbox>
                 <TextBlock x:Name="xNameTextBlockRemainingTime" Text="00:00:00" TextAlignment="Center" Foreground="{Binding SelectedColor, Converter={StaticResource ColorToSolidColorBrushConverter}, ElementName=xNameColorPickerNumber}"/>
             </Viewbox>
-            <Viewbox Grid.Column="2">
-                <TextBlock x:Name="xNameTextBlockElpasedTime" Text="00:00:00" TextAlignment="Center" Foreground="Lime"/>
-            </Viewbox>
+            <StackPanel Grid.Column="2">
+                <StackPanel.Resources>
+                    <Style TargetType="TextBlock">
+                        <Setter Property="FontSize" Value="16"/>
+                    </Style>
+                </StackPanel.Resources>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="Elapsed"/>
+                    <TextBlock x:Name="xNameTextBlockElapsedTime" Text="00:00:00" Foreground="Lime" />
+                </StackPanel>
+                <StackPanel Grid.Column="2" Orientation="Horizontal">
+                    <TextBlock Text="Elapsed"/>
+                    <TextBlock x:Name="xNameTextBlockPauseTime" Text="00:00:00" Foreground="Cyan" />
+                </StackPanel>
+            </StackPanel>
             <Separator Grid.ColumnSpan="3" Grid.Row="1" VerticalAlignment="Top"/>
             <StackPanel HorizontalAlignment="Left" Grid.Row="1">
                 <TextBlock x:Name="xNameTextBlockHelp" TextWrapping="Wrap" Foreground="Lime" Text="wwwwwwwwwwwwwwwwwwwwwwwwwwwwwww"  FontSize="20"/>

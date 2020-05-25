@@ -12,14 +12,41 @@ namespace display_time_remaining
 		int _intervalMS;
 		TimeSpan _destTime;
 		TimeSpan _startTime;
+		TimeSpan _startTimePause;
+		TimeSpan _pauseTimeTotal;
 		bool IsSetting => xNameGridSettings.Visibility == Visibility.Visible;
+		bool IsPaused;
 
 		public MainWindow()
 		{
 			InitializeComponent();
+			xNameGridPause.Visibility = Visibility.Hidden;
+			xNameViewboxPause.Visibility = Visibility.Hidden;
 			this.PreviewKeyDown += new KeyEventHandler((sender, e) => {
 				if (e.Key == Key.Escape)
 					Close();
+				else if (e.Key == Key.S && !IsSetting) {
+					xNameGridSettings.Visibility = Visibility.Visible;
+					xNameStackPanelMain.Visibility = Visibility.Visible;
+					xNameGridInfo.Visibility = Visibility.Hidden;
+				}
+				else if (e.Key == Key.P && !IsSetting) {
+					IsPaused = !IsPaused;
+					if (!IsPaused) {
+						xNameGridPause.Visibility = Visibility.Hidden;
+						xNameStackPanelMain.Visibility = Visibility.Visible;
+						xNameViewboxPause.Visibility = Visibility.Hidden;
+						_timer.Tick -= OnTickPause;
+						_pauseTimeTotal += DateTime.Now.TimeOfDay - _startTimePause;
+					}
+					else {
+						xNameGridPause.Visibility = Visibility.Visible;
+						xNameStackPanelMain.Visibility = Visibility.Hidden;
+						xNameViewboxPause.Visibility = Visibility.Visible;
+						_startTimePause = DateTime.Now.TimeOfDay;
+						_timer.Tick += OnTickPause;
+					}
+				}
 			});
 			this.Loaded += Init;
 			this.MouseEnter += OnEnter;
@@ -36,8 +63,6 @@ namespace display_time_remaining
 			((SolidColorBrush)Background).Color = Color.FromArgb(c.A, c.R, c.G, c.B);
 			c = Properties.Settings.Default.ColorText;
 			((SolidColorBrush)xNameTextBlockTimerMain.Foreground).Color = Color.FromArgb(c.A, c.R, c.G, c.B);
-
-
 		}
 
 		private void Window_Closed(object sender, EventArgs e)
@@ -96,9 +121,9 @@ namespace display_time_remaining
 		{
 			SetTrans(false);
 			xNameGridInfo.Visibility = Visibility.Hidden;
-			xNameTextBlockHelp.Text = @"Esc: Close window
-S: Show settings
-P: Pause
+			xNameTextBlockHelp.Text = @"'Esc': Close window
+'S': Show settings
+'P': Pause
 			";
 		}
 
@@ -108,6 +133,7 @@ P: Pause
 				return;
 			SetTrans(false);
 			xNameGridInfo.Visibility = Visibility.Visible;
+			xNameGridPause.Visibility = Visibility.Hidden;
 			xNameStackPanelMain.Visibility = Visibility.Hidden;
 			_timer.Tick += OnTickInfo;
 		}
@@ -118,15 +144,26 @@ P: Pause
 				return;
 			SetTrans(true);
 			xNameGridInfo.Visibility = Visibility.Hidden;
-			xNameStackPanelMain.Visibility = Visibility.Visible;
+			if (IsPaused)
+				xNameGridPause.Visibility = Visibility.Visible;
+			else
+				xNameStackPanelMain.Visibility = Visibility.Visible;
 			_timer.Tick -= OnTickInfo;
 		}
 
 		void OnTickInfo(object sender, EventArgs e)
 		{
 			var diff = _startTime - DateTime.Now.TimeOfDay;
-			xNameTextBlockElpasedTime.Text = diff.ToString(xNameTextBoxDisplayformat.Text);
+			xNameTextBlockElapsedTime.Text = diff.ToString(xNameTextBoxDisplayformat.Text);
 			xNameTextBlockRemainingTime.Text = xNameTextBlockTimerMain.Text;
+		}
+
+		void OnTickPause(object sender, EventArgs e)
+		{
+			var diff = DateTime.Now.TimeOfDay - _startTimePause + _pauseTimeTotal;
+			xNameTextBlockTimerPause.Text = diff.ToString(xNameTextBoxDisplayformat.Text);
+			xNameTextBlockRemainingTime2.Text = xNameTextBlockTimerMain.Text;
+			xNameTextBlockPauseTime.Text = xNameTextBlockTimerPause.Text;
 		}
 
 		void SetTrans(bool transparency)
