@@ -71,7 +71,7 @@
             <xctk:ColorPicker x:Name="xNameColorPickerBackground" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Column="2" Grid.Row="5" Width="100" ColorMode="ColorCanvas" SelectedColor="#FFFBFBFB" Background="White" ShowTabHeaders="False"/>
             <Button Content="Start" Click="Button_Click" Grid.Row="6" HorizontalAlignment="Center" Width="100" VerticalAlignment="Center" Grid.ColumnSpan="3" Grid.RowSpan="3"/>
         </Grid>
-        <Grid x:Name="xNameGridInfo" Background="#FF787878">
+        <Grid x:Name="xNameGridInfo" Background="#7F787878">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="220*"/>
                 <ColumnDefinition Width="20*"/>
@@ -92,11 +92,11 @@
                     </Style>
                 </StackPanel.Resources>
                 <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="Elapsed"/>
+                    <TextBlock Text="Elapsed "/>
                     <TextBlock x:Name="xNameTextBlockElapsedTime" Text="00:00:00" Foreground="Lime" />
                 </StackPanel>
                 <StackPanel Grid.Column="2" Orientation="Horizontal">
-                    <TextBlock Text="Elapsed"/>
+                    <TextBlock Text="Paused "/>
                     <TextBlock x:Name="xNameTextBlockPauseTime" Text="00:00:00" Foreground="Cyan" />
                 </StackPanel>
             </StackPanel>

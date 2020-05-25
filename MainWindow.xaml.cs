@@ -26,9 +26,14 @@ namespace display_time_remaining
 				if (e.Key == Key.Escape)
 					Close();
 				else if (e.Key == Key.S && !IsSetting) {
+					_timer.Tick -= OnTickMain;
+					_timer.Tick -= OnTickInfo;
+					_timer.Tick -= OnTickPause;
 					xNameGridSettings.Visibility = Visibility.Visible;
 					xNameStackPanelMain.Visibility = Visibility.Visible;
 					xNameGridInfo.Visibility = Visibility.Hidden;
+					xNameGridPause.Visibility = Visibility.Hidden;
+					xNameViewboxPause.Visibility = Visibility.Hidden;
 				}
 				else if (e.Key == Key.P && !IsSetting) {
 					IsPaused = !IsPaused;
@@ -90,8 +95,13 @@ namespace display_time_remaining
 				c.A = Math.Max(c.A, (byte)2);
 				sb.Color = c;
 			}
-
 			ResizeMode = ResizeMode.CanResizeWithGrip;
+			// リセット
+			OnTickMain(null, null);
+			OnTickInfo(null, null);
+			_pauseTimeTotal = TimeSpan.Zero;
+			_startTimePause = DateTime.Now.TimeOfDay;
+			OnTickPause(null, null);
 		}
 
 		DispatcherTimer CreateTimer()
@@ -104,16 +114,7 @@ namespace display_time_remaining
 				_destTime = _destTime.Add(TimeSpan.FromDays(1));
 			}
 			var time_of_day = DateTime.Now.TimeOfDay;
-			t.Tick += (sender, e) => {
-				var diff = _destTime - DateTime.Now.TimeOfDay;
-				if (diff < TimeSpan.Zero) {
-					diff = TimeSpan.Zero;
-					_timer.Stop();
-					xNameTextBlockTimerMain.Text = "FINISH";
-					return;
-				}
-				xNameTextBlockTimerMain.Text = diff.ToString(xNameTextBoxDisplayformat.Text);
-			};
+			t.Tick += OnTickMain;
 			return t;
 		}
 
@@ -149,6 +150,17 @@ namespace display_time_remaining
 			else
 				xNameStackPanelMain.Visibility = Visibility.Visible;
 			_timer.Tick -= OnTickInfo;
+		}
+
+		void OnTickMain(object sender, EventArgs e)
+		{
+			var diff = _destTime - DateTime.Now.TimeOfDay;
+			if (diff < TimeSpan.Zero) {
+				_timer.Stop();
+				xNameTextBlockTimerMain.Text = "FINISH";
+				return;
+			}
+			xNameTextBlockTimerMain.Text = diff.ToString(xNameTextBoxDisplayformat.Text);
 		}
 
 		void OnTickInfo(object sender, EventArgs e)
