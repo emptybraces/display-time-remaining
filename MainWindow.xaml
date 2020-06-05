@@ -72,36 +72,32 @@
             <Button Content="Start" Click="Button_Click" Grid.Row="6" HorizontalAlignment="Center" Width="100" VerticalAlignment="Center" Grid.ColumnSpan="3" Grid.RowSpan="3"/>
         </Grid>
         <Grid x:Name="xNameGridInfo" Background="#7F787878">
+            <Grid.Resources>
+                <Style x:Key="Title" TargetType="TextBlock">
+                    <Setter Property="FontSize" Value="16"/>
+                </Style>
+                <Style x:Key="Time" TargetType="TextBlock">
+                    <Setter Property="FontSize" Value="24"/>
+                    <Setter Property="Margin" Value="20,10,0,0"/>
+                </Style>
+            </Grid.Resources>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="220*"/>
-                <ColumnDefinition Width="20*"/>
-                <ColumnDefinition Width="220*"/>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="1*"/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition Height="40*"/>
                 <RowDefinition Height="131*"/>
             </Grid.RowDefinitions>
-            <TextBlock Text="Remaining" FontSize="15"/>
-            <Viewbox>
-                <TextBlock x:Name="xNameTextBlockRemainingTime" Text="00:00:00" TextAlignment="Center" Foreground="{Binding SelectedColor, Converter={StaticResource ColorToSolidColorBrushConverter}, ElementName=xNameColorPickerNumber}"/>
-            </Viewbox>
-            <StackPanel Grid.Column="2">
-                <StackPanel.Resources>
-                    <Style TargetType="TextBlock">
-                        <Setter Property="FontSize" Value="16"/>
-                    </Style>
-                </StackPanel.Resources>
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="Elapsed "/>
-                    <TextBlock x:Name="xNameTextBlockElapsedTime" Text="00:00:00" Foreground="Lime" />
-                </StackPanel>
-                <StackPanel Grid.Column="2" Orientation="Horizontal">
-                    <TextBlock Text="Paused "/>
-                    <TextBlock x:Name="xNameTextBlockPauseTime" Text="00:00:00" Foreground="Cyan" />
-                </StackPanel>
-            </StackPanel>
-            <Separator Grid.ColumnSpan="3" Grid.Row="1" VerticalAlignment="Top"/>
-            <StackPanel HorizontalAlignment="Left" Grid.Row="1">
+            <TextBlock Text="Remaining" Style="{StaticResource Title}"/>
+            <TextBlock x:Name="xNameTextBlockRemainingTime" Text="00:00:00" Foreground="{Binding SelectedColor, Converter={StaticResource ColorToSolidColorBrushConverter}, ElementName=xNameColorPickerNumber}" HorizontalAlignment="Left" Style="{StaticResource Time}" Width="88"/>
+            <TextBlock Text="Elapsed "  Style="{StaticResource Title}" Width="58" Grid.Column="1" HorizontalAlignment="Left"/>
+            <TextBlock x:Name="xNameTextBlockElapsedTime" Text="00:00:00" Foreground="Lime" HorizontalAlignment="Left" Style="{StaticResource Time}" Width="88" Grid.Column="1"/>
+            <TextBlock Text="Paused " HorizontalAlignment="Left"  Style="{StaticResource Title}" Width="55" Grid.Column="2"/>
+            <TextBlock x:Name="xNameTextBlockPauseTime" Text="00:00:00" Foreground="Cyan" HorizontalAlignment="Left" Style="{StaticResource Time}" Width="88" Grid.Column="2"/>
+            <Separator Grid.ColumnSpan="3" Grid.Row="1" VerticalAlignment="Top" Height="1" Margin="0,2,0,0"/>
+            <StackPanel HorizontalAlignment="Left" Grid.Row="1" Width="173" Grid.ColumnSpan="2">
                 <TextBlock x:Name="xNameTextBlockHelp" TextWrapping="Wrap" Foreground="Lime" Text="wwwwwwwwwwwwwwwwwwwwwwwwwwwwwww"  FontSize="20"/>
             </StackPanel>
         </Grid>
