@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit" x:Class="display_time_remaining.MainWindow"
         mc:Ignorable="d"
-        Title="remaining time apps" Height="170" Width="400" ResizeMode="NoResize" Topmost="True" WindowStyle="None" AllowsTransparency="True" Icon="icon.png" ShowInTaskbar="False" Loaded="Window_Loaded" Closed="Window_Closed">
+        Title="remaining time apps" Height="170" Width="400" ResizeMode="NoResize" WindowStyle="None" AllowsTransparency="True" Icon="icon.png" ShowInTaskbar="False" Loaded="Window_Loaded" Closed="Window_Closed">
     <Window.Resources>
         <xctk:ColorToSolidColorBrushConverter x:Key="ColorToSolidColorBrushConverter"/>
     </Window.Resources>
@@ -13,7 +13,7 @@
         <Binding Converter="{StaticResource ColorToSolidColorBrushConverter}" ElementName="xNameColorPickerBackground" Path="SelectedColor"/>
     </Window.Background>
     <Grid >
-        <Viewbox x:Name="xNameViewboxPause" HorizontalAlignment="Left" StretchDirection="DownOnly" Margin="134,0,26,0" Grid.ColumnSpan="2">
+        <Viewbox x:Name="xNameViewboxPause" HorizontalAlignment="Left" StretchDirection="DownOnly" Margin="134,0,26,0" Grid.ColumnSpan="2" d:IsHidden="True">
             <Image Source="pause.png" />
         </Viewbox>
         <StackPanel x:Name="xNameStackPanelMain" d:IsHidden="True">
@@ -40,11 +40,12 @@
             <TextBlock x:Name="xNameTextBlockRemainingTime2" Text="00:00:00" TextAlignment="Center" Foreground="{Binding SelectedColor, Converter={StaticResource ColorToSolidColorBrushConverter}, ElementName=xNameColorPickerNumber}" Grid.Column="1" VerticalAlignment="Bottom" FontSize="30"/>
         </Grid>
 
-        <Grid x:Name="xNameGridSettings" Grid.Row="2" Grid.Column="1" Background="#02FFFFFF" d:IsHidden="True">
+        <Grid x:Name="xNameGridSettings" Grid.Row="2" Grid.Column="1" Background="#02FFFFFF">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="220*"/>
-                <ColumnDefinition Width="20*"/>
-                <ColumnDefinition Width="220*"/>
+                <ColumnDefinition Width="191*"/>
+                <ColumnDefinition Width="18*"/>
+                <ColumnDefinition Width="100*"/>
+                <ColumnDefinition Width="91*"/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition Height="40*"/>
@@ -54,24 +55,30 @@
                 <RowDefinition Height="20*"/>
                 <RowDefinition Height="20*"/>
                 <RowDefinition Height="20*"/>
+                <RowDefinition Height="20*"/>
             </Grid.RowDefinitions>
-            <StackPanel Grid.Row="0" Grid.ColumnSpan="3">
+            <StackPanel Grid.Row="0" Grid.ColumnSpan="4">
                 <TextBlock Text="Settings" FontSize="20" Margin="0,5" HorizontalAlignment="Center" />
                 <Separator Margin="0,2,0,7"/>
             </StackPanel>
-            <TextBlock Text="Target Time:" Grid.Row="1" TextAlignment="Right" VerticalAlignment="Center"/>
-            <TextBlock Text="Display Format:" VerticalAlignment="Center" Grid.Row="2" HorizontalAlignment="Right" />
-            <TextBlock Text="Refresh Interval(ms):" VerticalAlignment="Center" Grid.Row="3" HorizontalAlignment="Right" />
-            <TextBlock Text="Timer Color:" VerticalAlignment="Center" Grid.Row="4" HorizontalAlignment="Right" />
-            <TextBlock Text="Background Color:" Grid.Row="5" HorizontalAlignment="Right" VerticalAlignment="Center" />
-            <xctk:TimePicker x:Name="xNameTimePickerTargetTime" DefaultValue="00:00" CurrentDateTimePart="Hour24" MinWidth="100" DisplayDefaultValueOnEmptyText="True" Grid.Row="1" Grid.Column="2" HorizontalAlignment="Left"/>
-            <TextBox x:Name="xNameTextBoxDisplayformat" Width="100" Text="hh\:mm\:ss\:ff" HorizontalAlignment="Left" Grid.Row="2" Grid.Column="2" TextAlignment="Right" VerticalAlignment="Center"/>
+            <!--label controls-->
+            <TextBlock Text="Target Time:" Grid.Row="1" TextAlignment="Right" VerticalAlignment="Center" Height="16"/>
+            <TextBlock Text="Display Format:" VerticalAlignment="Center" Grid.Row="2" Height="16" Width="81" TextAlignment="Right" HorizontalAlignment="Right" />
+            <TextBlock Text="Refresh Interval(ms):" VerticalAlignment="Center" Grid.Row="3" HorizontalAlignment="Right" Height="16" Width="107" TextAlignment="Right" />
+            <TextBlock Text="Timer Color:" VerticalAlignment="Center" Grid.Row="4" HorizontalAlignment="Right" Height="16" Width="64" TextAlignment="Right" />
+            <TextBlock Text="Background Color:" Grid.Row="5" HorizontalAlignment="Right" VerticalAlignment="Center"  Height="16" Width="98" />
+            <TextBlock Text="TopMost:" Grid.Row="6" VerticalAlignment="Center"  Height="16" Width="98" TextAlignment="Right" HorizontalAlignment="Right" />
+            <!--input controls-->
+            <xctk:TimePicker x:Name="xNameTimePickerTargetTime" DefaultValue="00:00" CurrentDateTimePart="Hour24" MinWidth="100" DisplayDefaultValueOnEmptyText="True" Grid.Row="1" Grid.Column="2" HorizontalAlignment="Left" Width="100"/>
+            <CheckBox x:Name="xNameCheckboxSpan" Grid.Row="1" Grid.Column="3" HorizontalAlignment="Left" VerticalAlignment="Center" Content="span" />
+            <TextBox x:Name="xNameTextBoxDisplayformat" Width="100" Text="hh\:mm\:ss\:ff" HorizontalAlignment="Left" Grid.Row="2" Grid.Column="2" TextAlignment="Right" VerticalAlignment="Center" Margin="0,2,0,1" Height="18"/>
             <xctk:IntegerUpDown x:Name="xNameIntegerUpDownInterval" Minimum="10" Increment="10" DisplayDefaultValueOnEmptyText="True" DefaultValue="50" Grid.Row="3" Grid.Column="2" HorizontalAlignment="Left" Width="100"/>
-            <xctk:ColorPicker x:Name="xNameColorPickerNumber" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Column="2" Grid.Row="4" Width="100" SelectedColor="#FFA2A2A2" Background="White" ShowTabHeaders="False" ColorMode="ColorCanvas"/>
-            <xctk:ColorPicker x:Name="xNameColorPickerBackground" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Column="2" Grid.Row="5" Width="100" ColorMode="ColorCanvas" SelectedColor="#FFFBFBFB" Background="White" ShowTabHeaders="False"/>
-            <Button Content="Start" Click="Button_Click" Grid.Row="6" HorizontalAlignment="Center" Width="100" VerticalAlignment="Center" Grid.ColumnSpan="3" Grid.RowSpan="3"/>
+            <xctk:ColorPicker x:Name="xNameColorPickerNumber" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Column="2" Grid.Row="4" Width="100" SelectedColor="#FFA2A2A2" Background="White" ShowTabHeaders="False" ColorMode="ColorCanvas" Height="21"/>
+            <xctk:ColorPicker x:Name="xNameColorPickerBackground" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Column="2" Grid.Row="5" Width="100" ColorMode="ColorCanvas" SelectedColor="#FFFBFBFB" Background="White" ShowTabHeaders="False" Height="21"/>
+            <CheckBox x:Name="xNameCheckboxTopMost" Grid.Row="6" Grid.Column="2" HorizontalAlignment="Left" VerticalAlignment="Center" Content="" />
+            <Button Content="Start" Click="Button_Click" Grid.Row="7" HorizontalAlignment="Center" Width="100" VerticalAlignment="Center" Grid.ColumnSpan="3" Margin="150,1,59,0" Height="20"/>
         </Grid>
-        <Grid x:Name="xNameGridInfo" Background="#7F787878">
+        <Grid x:Name="xNameGridInfo" Background="#7F787878" d:IsHidden="True">
             <Grid.Resources>
                 <Style x:Key="Title" TargetType="TextBlock">
                     <Setter Property="FontSize" Value="16"/>

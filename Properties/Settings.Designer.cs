@@ -82,5 +82,29 @@ namespace display_time_remaining.Properties {
                 this["Interval"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool IsSpan {
+            get {
+                return ((bool)(this["IsSpan"]));
+            }
+            set {
+                this["IsSpan"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool IsTopMost {
+            get {
+                return ((bool)(this["IsTopMost"]));
+            }
+            set {
+                this["IsTopMost"] = value;
+            }
+        }
     }
 }

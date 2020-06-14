@@ -68,6 +68,8 @@ namespace display_time_remaining
 			((SolidColorBrush)Background).Color = Color.FromArgb(c.A, c.R, c.G, c.B);
 			c = Properties.Settings.Default.ColorText;
 			((SolidColorBrush)xNameTextBlockTimerMain.Foreground).Color = Color.FromArgb(c.A, c.R, c.G, c.B);
+			xNameCheckboxSpan.IsChecked = Properties.Settings.Default.IsSpan;
+			xNameCheckboxTopMost.IsChecked = Properties.Settings.Default.IsTopMost;
 		}
 
 		private void Window_Closed(object sender, EventArgs e)
@@ -79,6 +81,8 @@ namespace display_time_remaining
 			Properties.Settings.Default.ColorBackground = System.Drawing.Color.FromArgb(c.A, c.R, c.G, c.B);
 			c = ((SolidColorBrush)xNameTextBlockTimerMain.Foreground).Color;
 			Properties.Settings.Default.ColorText = System.Drawing.Color.FromArgb(c.A, c.R, c.G, c.B);
+			Properties.Settings.Default.IsSpan = xNameCheckboxSpan.IsChecked.Value;
+			Properties.Settings.Default.IsTopMost = xNameCheckboxTopMost.IsChecked.Value;
 			Properties.Settings.Default.Save();
 		}
 
@@ -86,7 +90,10 @@ namespace display_time_remaining
 		{
 			xNameGridSettings.Visibility = Visibility.Hidden;
 			xNameStackPanelMain.Visibility = Visibility.Visible;
-			_destTime = xNameTimePickerTargetTime.Value.Value.TimeOfDay;
+			if (xNameCheckboxSpan.IsChecked.Value)
+				_destTime = DateTime.Now.TimeOfDay + xNameTimePickerTargetTime.Value.Value.TimeOfDay;
+			else
+				_destTime = xNameTimePickerTargetTime.Value.Value.TimeOfDay;
 			_intervalMS = xNameIntegerUpDownInterval.Value.Value;
 			_timer = CreateTimer();
 			_timer.Start();
@@ -101,6 +108,7 @@ namespace display_time_remaining
 			OnTickInfo(null, null);
 			_pauseTimeTotal = TimeSpan.Zero;
 			_startTimePause = DateTime.Now.TimeOfDay;
+			Topmost = xNameCheckboxTopMost.IsChecked.Value;
 			OnTickPause(null, null);
 		}
 
