@@ -68,7 +68,7 @@ namespace display_time_remaining
 
 		private void Window_Loaded(object sender, RoutedEventArgs e)
 		{
-			xNameTextBoxDisplayformat.Text = Properties.Settings.Default.FormatTime;
+			xNameComboBoxDisplayFormat.Text = Properties.Settings.Default.FormatTime;
 			xNameTimePickerTargetTime.Value = new DateTime() + Properties.Settings.Default.DestTime;
 			xNameIntegerUpDownInterval.Value = Properties.Settings.Default.Interval;
 			var c = Properties.Settings.Default.ColorBackground;
@@ -81,7 +81,7 @@ namespace display_time_remaining
 
 		private void Window_Closed(object sender, EventArgs e)
 		{
-			Properties.Settings.Default.FormatTime = xNameTextBoxDisplayformat.Text;
+			Properties.Settings.Default.FormatTime = xNameComboBoxDisplayFormat.Text;
 			Properties.Settings.Default.DestTime = xNameTimePickerTargetTime.Value.Value.TimeOfDay;
 			Properties.Settings.Default.Interval = xNameIntegerUpDownInterval.Value.Value;
 			var c = ((SolidColorBrush)Background).Color;
@@ -176,20 +176,20 @@ namespace display_time_remaining
 				Notification(new string[] { "FINISH", _destTime.ToString() });
 				return;
 			}
-			xNameTextBlockTimerMain.Text = diff.ToString(xNameTextBoxDisplayformat.Text);
+			xNameTextBlockTimerMain.Text = diff.ToString(xNameComboBoxDisplayFormat.Text);
 		}
 
 		void OnTickInfo(object sender, EventArgs e)
 		{
 			var diff = _startTime - DateTime.Now.TimeOfDay;
-			xNameTextBlockElapsedTime.Text = diff.ToString(xNameTextBoxDisplayformat.Text);
+			xNameTextBlockElapsedTime.Text = diff.ToString(xNameComboBoxDisplayFormat.Text);
 			xNameTextBlockRemainingTime.Text = xNameTextBlockTimerMain.Text;
 		}
 
 		void OnTickPause(object sender, EventArgs e)
 		{
 			var diff = DateTime.Now.TimeOfDay - _startTimePause + _pauseTimeTotal;
-			xNameTextBlockTimerPause.Text = diff.ToString(xNameTextBoxDisplayformat.Text);
+			xNameTextBlockTimerPause.Text = diff.ToString(xNameComboBoxDisplayFormat.Text);
 			xNameTextBlockRemainingTime2.Text = xNameTextBlockTimerMain.Text;
 			xNameTextBlockPauseTime.Text = xNameTextBlockTimerPause.Text;
 		}

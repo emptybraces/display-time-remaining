@@ -40,7 +40,7 @@
             <TextBlock x:Name="xNameTextBlockRemainingTime2" Text="00:00:00" TextAlignment="Center" Foreground="{Binding SelectedColor, Converter={StaticResource ColorToSolidColorBrushConverter}, ElementName=xNameColorPickerNumber}" Grid.Column="1" VerticalAlignment="Bottom" FontSize="30"/>
         </Grid>
 
-        <Grid x:Name="xNameGridSettings" Grid.Row="2" Grid.Column="1" Background="#02FFFFFF" d:IsHidden="True">
+        <Grid x:Name="xNameGridSettings" Grid.Row="2" Grid.Column="1" Background="#02FFFFFF">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="191*"/>
                 <ColumnDefinition Width="18*"/>
@@ -71,14 +71,19 @@
             <!--input controls-->
             <xctk:TimePicker x:Name="xNameTimePickerTargetTime" DefaultValue="00:00" CurrentDateTimePart="Hour24" MinWidth="100" DisplayDefaultValueOnEmptyText="True" Grid.Row="1" Grid.Column="2" HorizontalAlignment="Left" Width="100"/>
             <CheckBox x:Name="xNameCheckboxSpan" Grid.Row="1" Grid.Column="3" HorizontalAlignment="Left" VerticalAlignment="Center" Content="span" />
-            <TextBox x:Name="xNameTextBoxDisplayformat" Width="100" Text="hh\:mm\:ss\:ff" HorizontalAlignment="Left" Grid.Row="2" Grid.Column="2" TextAlignment="Right" VerticalAlignment="Center" Margin="0,2,0,1" Height="18"/>
+            <!--<TextBox x:Name="xNameTextBoxDisplayformat" Width="100" Text="hh\:mm\:ss\:ff" HorizontalAlignment="Left" Grid.Row="2" Grid.Column="2" TextAlignment="Right" VerticalAlignment="Center" Margin="0,2,0,1" Height="18"/>-->
+            <ComboBox x:Name="xNameComboBoxDisplayFormat" HorizontalAlignment="Left" Text="hh\:mm\:ss\:ff" Width="120" Grid.Row="2" Grid.Column="2" IsEditable="True" VerticalAlignment="Center">
+                <ComboBoxItem Content="hh\:mm\:ss\:ff"/>
+                <ComboBoxItem Content="hh\:mm\:ss"/>
+                <ComboBoxItem Content="hh\:mm"/>
+            </ComboBox>
             <xctk:IntegerUpDown x:Name="xNameIntegerUpDownInterval" Minimum="10" Increment="10" DisplayDefaultValueOnEmptyText="True" DefaultValue="50" Grid.Row="3" Grid.Column="2" HorizontalAlignment="Left" Width="100"/>
             <xctk:ColorPicker x:Name="xNameColorPickerNumber" HorizontalAlignment="Left" Grid.Column="2" Grid.Row="4" Width="100" SelectedColor="#FFA2A2A2" Background="White" ShowTabHeaders="False" ColorMode="ColorCanvas" Height="21"/>
             <xctk:ColorPicker x:Name="xNameColorPickerBackground" HorizontalAlignment="Left" Grid.Column="2" Grid.Row="5" Width="100" ColorMode="ColorCanvas" SelectedColor="#FFFBFBFB" Background="White" ShowTabHeaders="False" Height="21"/>
             <CheckBox x:Name="xNameCheckboxTopMost" Grid.Row="6" Grid.Column="2" HorizontalAlignment="Left" VerticalAlignment="Center" Content="" />
             <Button Content="Start" Click="Button_Click" Grid.Row="7" HorizontalAlignment="Center" Width="100" VerticalAlignment="Center" Grid.ColumnSpan="3" Margin="150,1,59,0" Height="20"/>
         </Grid>
-        <Grid x:Name="xNameGridInfo" Background="#7F787878">
+        <Grid x:Name="xNameGridInfo" Background="#7F787878" d:IsHidden="True">
             <Grid.Resources>
                 <Style x:Key="Title" TargetType="TextBlock">
                     <Setter Property="FontSize" Value="16"/>
