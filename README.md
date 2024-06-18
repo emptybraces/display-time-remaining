@@ -1,4 +1,4 @@
-# display_time_remaining
+# display time remaining
 This show the time today that you have.
 
 Latest
